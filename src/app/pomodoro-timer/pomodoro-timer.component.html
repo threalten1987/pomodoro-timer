@@ -1,0 +1,38 @@
+<div class="pomodoro-container" [class.dark]="isDarkMode">
+  <button class="theme-toggle" (click)="toggleDarkMode()">
+    {{ isDarkMode ? '☀️' : '🌙' }}
+  </button>
+  <div class="mode-selector">
+    @for (m of modes; track m.key) {
+      <button 
+        [class.active]="mode === m.key"
+        (click)="setMode(m.key)">
+        {{ m.label }}
+      </button>
+    }
+  </div>
+
+  <div class="timer-display">
+    <svg class="progress-ring" viewBox="0 0 200 200">
+      <circle class="progress-bg" cx="100" cy="100" r="90" />
+      <circle 
+        class="progress-bar" 
+        cx="100" 
+        cy="100" 
+        r="90"
+        [style.stroke-dasharray]="565.48"
+        [style.stroke-dashoffset]="565.48 - (progress / 100) * 565.48"
+      />
+    </svg>
+    <div class="time">{{ displayTime }}</div>
+  </div>
+
+  <div class="controls">
+    @if (!isRunning) {
+      <button class="btn-primary" (click)="startTimer()">Iniciar</button>
+    } @else {
+      <button class="btn-secondary" (click)="stopTimer()">Pausar</button>
+    }
+    <button class="btn-outline" (click)="resetTimer()">Reiniciar</button>
+  </div>
+</div>
