@@ -38,12 +38,21 @@ export class PomodoroTimerComponent implements OnDestroy {
     return this.modes.find(m => m.key === this.mode)?.label || 'Pomodoro';
   }
 
+  private updateTitle(): void {
+    const title = this.isRunning ? `${this.displayTime} - Pomodoro` : 'Pomodoro Timer';
+    if (typeof document !== 'undefined') {
+      document.title = title;
+    }
+  }
+
   startTimer(): void {
     if (this.isRunning) return;
     this.isRunning = true;
+    this.updateTitle();
     this.intervalId = setInterval(() => {
       if (this.timeLeft > 0) {
         this.timeLeft--;
+        this.updateTitle();
       } else {
         this.stopTimer();
       }
@@ -56,11 +65,13 @@ export class PomodoroTimerComponent implements OnDestroy {
       clearInterval(this.intervalId);
       this.intervalId = null;
     }
+    this.updateTitle();
   }
 
   resetTimer(): void {
     this.stopTimer();
     this.timeLeft = this.initialTime;
+    this.updateTitle();
   }
 
   setMode(mode: TimerMode): void {
@@ -71,6 +82,7 @@ export class PomodoroTimerComponent implements OnDestroy {
       this.initialTime = config.minutes * 60;
       this.timeLeft = this.initialTime;
     }
+    this.updateTitle();
   }
 
   toggleDarkMode(): void {
