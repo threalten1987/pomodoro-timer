@@ -55,7 +55,11 @@ export class PomodoroTimerComponent implements OnDestroy {
         this.updateTitle();
       } else {
         this.stopTimer();
-        this.setMode('shortBreak');
+        if (this.mode === 'shortBreak') {
+          this.setMode('work');
+        } else {
+          this.setMode('shortBreak');
+        }
       }
     }, 1000);
   }
