@@ -40,6 +40,22 @@ export class PomodoroTimerComponent implements OnDestroy {
     return this.modes.find(m => m.key === this.mode)?.label || 'Pomodoro';
   }
 
+  constructor() {
+    this.requestNotificationPermission();
+  }
+
+  private requestNotificationPermission(): void {
+    if (typeof Notification !== 'undefined' && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  }
+
+  private showNotification(title: string, body: string): void {
+    if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+      new Notification(title, { body, icon: '/favicon.ico' });
+    }
+  }
+
   private updateTitle(): void {
     const title = this.isRunning ? `${this.displayTime} - Pomodoro` : 'Pomodoro Timer';
     if (typeof document !== 'undefined') {
@@ -60,11 +76,14 @@ export class PomodoroTimerComponent implements OnDestroy {
         if (this.mode === 'work') {
           this.completedPomodoros++;
           if (this.completedPomodoros % this.pomodorosUntilLongBreak === 0) {
+            this.showNotification('Pomodoro Timer', 'Te mereces un descanso más largo');
             this.setMode('longBreak');
           } else {
+            this.showNotification('Pomodoro Timer', 'Es hora de un descanso');
             this.setMode('shortBreak');
           }
         } else {
+          this.showNotification('Pomodoro Timer', 'Es hora de trabajar');
           this.setMode('work');
         }
       }
