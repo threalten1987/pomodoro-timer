@@ -17,6 +17,8 @@ export class PomodoroTimerComponent implements OnDestroy {
   mode: TimerMode = 'work';
   intervalId: any;
   isDarkMode = false;
+  completedPomodoros = 0;
+  pomodorosUntilLongBreak = 4;
 
   modes = [
     { key: 'work' as TimerMode, label: 'Pomodoro', minutes: 25 },
@@ -55,10 +57,15 @@ export class PomodoroTimerComponent implements OnDestroy {
         this.updateTitle();
       } else {
         this.stopTimer();
-        if (this.mode === 'shortBreak') {
-          this.setMode('work');
+        if (this.mode === 'work') {
+          this.completedPomodoros++;
+          if (this.completedPomodoros % this.pomodorosUntilLongBreak === 0) {
+            this.setMode('longBreak');
+          } else {
+            this.setMode('shortBreak');
+          }
         } else {
-          this.setMode('shortBreak');
+          this.setMode('work');
         }
       }
     }, 1000);
