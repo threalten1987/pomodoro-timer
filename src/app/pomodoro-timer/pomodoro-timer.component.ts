@@ -4,11 +4,10 @@ import { CommonModule } from '@angular/common';
 type TimerMode = 'work' | 'shortBreak' | 'longBreak';
 
 @Component({
-  selector: 'app-pomodoro-timer',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './pomodoro-timer.component.html',
-  styleUrl: './pomodoro-timer.component.css'
+    selector: 'app-pomodoro-timer',
+    imports: [CommonModule],
+    templateUrl: './pomodoro-timer.component.html',
+    styleUrl: './pomodoro-timer.component.css'
 })
 export class PomodoroTimerComponent implements OnDestroy {
   timeLeft = 25 * 60;
